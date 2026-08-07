@@ -1,6 +1,6 @@
 # Simple RAG
 
-**Status:** planned (first mode to implement)
+**Status:** active (Phase 4)
 
 ## Job
 
@@ -12,16 +12,16 @@ Classic retrieve-then-generate:
 4. Generate answer (Ollama)
 5. Return answer + sources
 
-## Belongs here
+## Code
 
-- Retriever helpers for simple top-k
-- Prompt template for grounded answers
-- `SimpleRagPipeline` entry (later)
+- `pipeline.py` — `SimpleRagPipeline`
+- `prompt.py` — grounded system/user prompts
 
 ## Depends on
 
 - `services/ollama` — embed + chat
 - `services/qdrant` — vector search
+- `services/chunking.py` — used at ingest time
 
 ## Owned by
 

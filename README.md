@@ -75,8 +75,8 @@ An always-on rule (`.cursor/rules/team-leader.mdc`) keeps TeamLeader active.
 1. Folders + docs — done
 2. Scaffold web + api + run scripts — done
 3. Wire Qdrant + Ollama — done
-4. Simple RAG pipeline — next
-5. Chat UI + mode switch
+4. Simple RAG pipeline — done
+5. Chat UI + mode switch — next
 6. Add other RAG modes one by one
 
 ## Env

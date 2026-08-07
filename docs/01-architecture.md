@@ -4,7 +4,7 @@
 
 ```text
 User (chat + mode)
-    → apps/web (Next.js)
+    → apps/web (Next.js)          [Phase 5 UI]
     → POST /chat { message, mode }
     → apps/api (FastAPI)
     → rag registry (mode → pipeline)
@@ -17,7 +17,7 @@ User (chat + mode)
 
 | Layer | Path | Job |
 |-------|------|-----|
-| UI | `apps/web` | Chat, ModeSwitcher, upload |
+| UI | `apps/web` | Chat, ModeSwitcher, upload (Phase 5) |
 | Routes | `apps/api/app/api/routes` | Thin HTTP entry |
 | Schemas | `apps/api/app/schemas` | Request/response contracts |
 | Registry | `apps/api/app/rag` | Map `mode` → pipeline |
@@ -28,24 +28,38 @@ User (chat + mode)
 
 ## Mode switch
 
-- UI stores current `mode`
+- UI stores current `mode` (Phase 5)
 - Every chat request sends that `mode`
 - Backend registry picks the pipeline
 - Same conversation can use different modes across messages
+- Currently registered: `simple` only
 
-## Contracts (planned)
+## Contracts (implemented)
 
 ```text
 RagMode = simple | agentic | hybrid | graph | multi_hop
 
 ChatRequest  { message, mode, conversation_id? }
 ChatResponse { answer, mode, sources[] }
+IngestResponse { filename, chunks_upserted, collection }
 ```
 
-## Ingest flow (planned)
+## Ingest flow (implemented)
 
 ```text
-Upload → data/raw → chunk → embed (Ollama) → upsert (Qdrant)
+POST /documents/ingest (.txt / .md)
+  → data/raw
+  → chunk
+  → embed (Ollama)
+  → upsert (Qdrant rag_chunks)
+```
+
+## Chat flow (implemented)
+
+```text
+POST /chat { mode: "simple" }
+  → SimpleRagPipeline
+  → embed query → search → prompt → generate
 ```
 
 ## Design rules
