@@ -4,43 +4,57 @@ Local-only AI stack for Rag-AI.
 
 ## Ollama
 
-| Item | Planned default |
-|------|-----------------|
+| Item | Default |
+|------|---------|
 | Base URL | `http://localhost:11434` |
-| Chat model | `llama3.2` (or your choice) |
+| Chat model | `llama3.2` |
 | Embed model | `nomic-embed-text` |
+| Embed dim | `768` |
 
-Env names (later):
+Env:
 
 - `OLLAMA_BASE_URL`
 - `OLLAMA_CHAT_MODEL`
 - `OLLAMA_EMBED_MODEL`
+- `OLLAMA_EMBED_DIM`
 
-Service code will live in `apps/api/app/services/ollama/`.
+Client: `apps/api/app/services/ollama/client.py` (`OllamaClient`)
 
-Typical use:
-
-1. Embed chunks and queries
-2. Chat completion with retrieved context
+Methods: `ping`, `embed`, `chat`
 
 ## Qdrant
 
-| Item | Planned default |
-|------|-----------------|
+| Item | Default |
+|------|---------|
 | URL | `http://localhost:6333` |
+| Collection | `rag_chunks` |
+| Distance | Cosine |
 | Role | Vector store for chunk embeddings |
 
-Env name (later):
+Env:
 
 - `QDRANT_URL`
+- `QDRANT_COLLECTION`
 
-Service code will live in `apps/api/app/services/qdrant/`.
+Client: `apps/api/app/services/qdrant/client.py` (`QdrantService`)
 
-Typical use:
+Methods: `ping`, `ensure_collection`, `upsert`, `search`
 
-1. Ensure collection exists (vector size matches embed model)
-2. Upsert chunk points after ingest
-3. Search top-k for the query vector
+Payload fields: `text`, `source`, `chunk_index`
+
+## Health
+
+`GET /health` reports:
+
+```json
+{
+  "status": "ok | degraded",
+  "dependencies": {
+    "ollama": { "ok": true },
+    "qdrant": { "ok": true }
+  }
+}
+```
 
 ## Docker
 
@@ -52,7 +66,7 @@ scripts\start-qdrant.bat
 
 Compose file: `docker/docker-compose.yml` (ports `6333` / `6334`).
 
-Ollama usually runs as a native local install; Compose is optional for Ollama.
+Ollama usually runs as a native local install.
 
 ## Rules
 
