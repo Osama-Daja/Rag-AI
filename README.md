@@ -65,6 +65,7 @@ Talk to **TeamLeader** for anything. It routes work:
 |-------|------|
 | TeamLeader | `.cursor/agents/TEAM_LEADER.md` |
 | Frontend | `.cursor/agents/FRONTEND.md` |
+| Design | `.cursor/agents/DESIGN.md` |
 | Backend | `.cursor/agents/BACKEND.md` |
 | RagAI | `.cursor/agents/RAGAI.md` |
 
@@ -76,7 +77,7 @@ An always-on rule (`.cursor/rules/team-leader.mdc`) keeps TeamLeader active.
 2. Scaffold web + api + run scripts — done
 3. Wire Qdrant + Ollama — done
 4. Simple RAG pipeline — done
-5. Chat UI + mode switch — next
+5. Chat UI + mode switch — done
 6. Add other RAG modes one by one
 
 ## Env

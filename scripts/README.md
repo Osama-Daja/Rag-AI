@@ -14,11 +14,12 @@ Windows helpers to run the Rag-AI local stack.
 | Script | Action |
 |--------|--------|
 | `check-env.bat` | Verify docker, node, npm, python; warn if ollama missing |
-| `start-qdrant.bat` | Start Qdrant via Docker Compose |
+| `ensure-docker.bat` | Launch Docker Desktop if needed and wait until the engine is ready |
+| `start-qdrant.bat` | Ensure Docker, then start Qdrant (or reuse whatever is on `:6333`) |
 | `stop-qdrant.bat` | Stop Qdrant |
 | `start-api.bat` | Create venv if needed, install deps, run FastAPI `:8000` |
 | `start-web.bat` | `npm install` if needed, run Next.js `:3000` |
-| `start-all.bat` | Start Qdrant, then open API + Web in new windows |
+| `start-all.bat` | Ensure Docker + Qdrant, then open API + Web in new windows |
 
 Root shortcut: [`start.bat`](../start.bat) → `scripts\start-all.bat`
 

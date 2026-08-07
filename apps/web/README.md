@@ -4,7 +4,7 @@ Next.js + TypeScript UI for Rag-AI.
 
 ## Status
 
-Scaffolded. Minimal home page is live. Chat + ModeSwitcher come later.
+Phase 5 active: one chat surface, ModeSwitcher, document upload.
 
 ## Run
 
@@ -14,41 +14,39 @@ From repo root:
 scripts\start-web.bat
 ```
 
-Or manually:
-
-```bat
-cd apps\web
-npm install
-npm run dev
-```
-
 - Web: http://localhost:3000
+- Needs API at `NEXT_PUBLIC_API_URL` (default `http://localhost:8000`)
 
-Copy `.env.example` → `.env.local` (the start script does this if missing).
+## Use
+
+1. Upload a `.txt`, `.md`, or `.pdf` in **Documents**, or click **Scan folder** for `data/raw`
+2. Keep mode on **simple** (other modes show “soon”)
+3. Ask a question in **Chat**
 
 ## Layout
 
 ```text
 src/
-  app/                 Next app router pages
+  app/
+    layout.tsx          + globals.css (tokens)
+    page.tsx            + page.module.css
   components/
-    chat/              ChatWindow, MessageList, MessageInput, ModeSwitcher
-    documents/         UploadPanel
-  hooks/               e.g. useChat
-  lib/                 API client helpers
-  types/               RagMode, ChatRequest, ChatResponse
+    chat/               each TSX has sibling .module.css
+    documents/          UploadPanel + .module.css
+  hooks/useChat.ts
+  lib/api.ts
+  types/rag.ts
 ```
 
-## Job
+## CSS convention
 
-- One chat surface
-- ModeSwitcher for RAG modes
-- Call FastAPI (`/chat`, ingest)
-- Show answer + sources
+Every UI `.tsx` has a sibling `.module.css`.  
+`layout.tsx` uses `globals.css` only. Hooks/lib/types have no CSS.
 
-## Owned by
+## Agents
 
-Frontend agent — `.cursor/agents/FRONTEND.md`
+- Frontend — `.cursor/agents/FRONTEND.md`
+- Design — `.cursor/agents/DESIGN.md`
 
 ## Does not belong here
 

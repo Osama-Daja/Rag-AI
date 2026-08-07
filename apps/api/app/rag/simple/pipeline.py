@@ -28,13 +28,15 @@ class SimpleRagPipeline:
         query_vector = vectors[0]
         hits = await self._qdrant.search(query_vector, limit=self._settings.rag_top_k)
 
+        preview = max(120, self._settings.rag_source_preview_chars)
         contexts: list[str] = []
         sources: list[Source] = []
         for hit in hits:
             payload = hit.get("payload") or {}
             text = str(payload.get("text") or "")
             if text:
-                contexts.append(text)
+                # Shorter context keeps local chat generation faster.
+                contexts.append(text if len(text) <= preview else f"{text[:preview]}…")
             sources.append(
                 Source(
                     id=str(hit.get("id")),

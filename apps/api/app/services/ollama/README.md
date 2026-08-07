@@ -1,13 +1,13 @@
 # Ollama service
 
-**Status:** active (Phase 3)
+**Status:** active
 
 ## Job
 
 Local client for:
 
 - Chat completions
-- Text embeddings
+- Text embeddings (batched)
 - Connectivity ping
 
 ## Config
@@ -16,16 +16,18 @@ Local client for:
 - `OLLAMA_CHAT_MODEL`
 - `OLLAMA_EMBED_MODEL`
 - `OLLAMA_EMBED_DIM` — vector size (default `768` for `nomic-embed-text`)
+- `OLLAMA_EMBED_BATCH_SIZE` — texts per `/api/embed` call (default `32`)
 
 ## Code
 
 - `client.py` — `OllamaClient` (`ping`, `embed`, `chat`)
+- `embed()` uses `POST /api/embed` with an `input` array; falls back to legacy `/api/embeddings` per text if needed
 - Wired via `app.api.deps.get_ollama_client`
 
 ## Used by
 
 - `GET /health` (ping)
-- RAG pipelines under `app/rag/*` (Phase 4+)
+- Ingest + RAG pipelines
 
 ## Rules
 

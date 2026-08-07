@@ -24,7 +24,8 @@ You are the only entry point. The user talks to you for anything.
 
 | Need | Call | File |
 |------|------|------|
-| UI, pages, chat, ModeSwitcher | Frontend | `.cursor/agents/FRONTEND.md` |
+| UI behavior, pages, hooks, API client | Frontend | `.cursor/agents/FRONTEND.md` |
+| Look/feel, CSS modules, visual system | Design | `.cursor/agents/DESIGN.md` |
 | API, routes, schemas, services | Backend | `.cursor/agents/BACKEND.md` |
 | RAG pipelines, Ollama, Qdrant, modes | RagAI | `.cursor/agents/RAGAI.md` |
 
@@ -38,7 +39,8 @@ You are the only entry point. The user talks to you for anything.
 
 ## Routing rules
 
-- Chat UI / ModeSwitcher / upload UI → Frontend
+- Chat UI behavior / ModeSwitcher logic / upload wiring → Frontend
+- Styling, CSS Modules, brand layout, motion → Design
 - `/chat`, ingest, FastAPI structure → Backend
 - Simple/hybrid/graph RAG, embeddings, retrieval → RagAI
 - Folders / structure / docs → TeamLeader plans, then specialists for their areas

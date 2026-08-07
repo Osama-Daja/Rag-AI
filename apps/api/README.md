@@ -1,10 +1,10 @@
 # Backend (`apps/api`)
 
-FastAPI service for Rag-AI: ingest, chat, and pipeline registry.
+FastAPI service for Rag-AI: scan, ingest, chat, and pipeline registry.
 
 ## Status
 
-Phase 4 complete: simple RAG ingest + `POST /chat`. Chat UI is Phase 5.
+Scan layer active: `.txt` / `.md` / `.pdf` extractors + folder scan. Simple RAG chat is live.
 
 ## Run
 
@@ -24,13 +24,21 @@ scripts\start-api.bat
 
 `GET /health` — API + Ollama + Qdrant status.
 
-### Ingest (txt / md)
+### Ingest (txt / md / pdf)
 
 ```bat
 curl -X POST http://localhost:8000/documents/ingest -F "file=@sample.txt"
 ```
 
-Saves to `data/raw`, chunks, embeds, upserts into Qdrant collection `rag_chunks`.
+Saves to `data/raw`, scans/extracts text, chunks, embeds, upserts into Qdrant.
+
+### Scan folder (`data/raw`)
+
+```bat
+curl -X POST http://localhost:8000/documents/scan
+```
+
+Scans supported files in `data/raw` and ingests each (per-file errors collected).
 
 ### Chat (simple RAG)
 
@@ -51,17 +59,31 @@ app/
   core/                config
   schemas/             chat, documents
   services/
+    scan/              extract text (txt/md/pdf) + list raw files
     ollama/            embed + chat
     qdrant/            upsert + search
     chunking.py
-    ingest.py
+    ingest.py          orchestrates scan → chunk → embed → upsert
   rag/
     base.py
     registry.py
     simple/            active pipeline
 ```
 
+## Performance knobs
+
+Defaults favor fewer, larger chunks and batched embeds:
+
+| Env | Default | Effect |
+| --- | --- | --- |
+| `OLLAMA_EMBED_BATCH_SIZE` | `32` | texts per `/api/embed` call |
+| `RAG_CHUNK_SIZE` / `RAG_CHUNK_OVERLAP` | `1200` / `150` | fewer chunks → faster ingest |
+| `RAG_TOP_K` | `4` | fewer hits in chat context |
+| `RAG_SOURCE_PREVIEW_CHARS` | `500` | truncates retrieved text sent to the LLM |
+
+Restart the API after changing `.env`.
+
 ## Owned by
 
 - Wiring/routes: Backend agent — `.cursor/agents/BACKEND.md`
-- Pipeline internals: RagAI agent — `.cursor/agents/RAGAI.md`
+- Pipeline / scan extractors: RagAI agent — `.cursor/agents/RAGAI.md`

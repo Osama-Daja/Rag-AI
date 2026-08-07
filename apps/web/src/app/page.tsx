@@ -1,13 +1,25 @@
-export default function HomePage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+"use client";
 
+import { ChatWindow } from "@/components/chat/ChatWindow";
+import { UploadPanel } from "@/components/documents/UploadPanel";
+
+import styles from "./page.module.css";
+
+export default function HomePage() {
   return (
-    <main style={{ padding: "2rem", maxWidth: "40rem" }}>
-      <h1 style={{ marginBottom: "0.5rem" }}>Rag-AI</h1>
-      <p style={{ color: "#444" }}>Rag-AI web — scaffold ready</p>
-      <p style={{ color: "#666", fontSize: "0.9rem" }}>
-        API target: <code>{apiUrl}</code>
-      </p>
+    <main className={styles.page}>
+      <div className={styles.shell}>
+        <header className={styles.brand}>
+          <h1 className={styles.brandName}>Rag-AI</h1>
+          <p className={styles.tagline}>
+            Local RAG chat with a mode switch — start with simple retrieval, grow into more.
+          </p>
+        </header>
+        <div className={styles.grid}>
+          <UploadPanel />
+          <ChatWindow />
+        </div>
+      </div>
     </main>
   );
 }

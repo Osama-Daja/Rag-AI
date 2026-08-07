@@ -36,22 +36,67 @@ class OllamaClient:
         if not texts:
             return []
 
+        batch_size = max(1, self._settings.ollama_embed_batch_size)
         vectors: list[list[float]] = []
-        async with httpx.AsyncClient(base_url=self._base_url, timeout=120.0) as client:
-            for text in texts:
-                response = await client.post(
-                    "/api/embeddings",
-                    json={"model": self.embed_model, "prompt": text},
+
+        async with httpx.AsyncClient(base_url=self._base_url, timeout=300.0) as client:
+            for start in range(0, len(texts), batch_size):
+                batch = texts[start : start + batch_size]
+                try:
+                    batch_vectors = await self._embed_batch(client, batch)
+                except OllamaError:
+                    # Older Ollama builds may lack /api/embed batching.
+                    batch_vectors = await self._embed_legacy(client, batch)
+                vectors.extend(batch_vectors)
+
+        if len(vectors) != len(texts):
+            raise OllamaError(
+                f"Embedding count mismatch: expected {len(texts)}, got {len(vectors)}"
+            )
+        return vectors
+
+    async def _embed_batch(
+        self,
+        client: httpx.AsyncClient,
+        batch: list[str],
+    ) -> list[list[float]]:
+        response = await client.post(
+            "/api/embed",
+            json={"model": self.embed_model, "input": batch},
+        )
+        if response.status_code >= 400:
+            raise OllamaError(
+                f"Ollama embed failed ({response.status_code}): {response.text}"
+            )
+        data = response.json()
+        embeddings = data.get("embeddings")
+        if not isinstance(embeddings, list) or len(embeddings) != len(batch):
+            raise OllamaError("Ollama /api/embed response missing embeddings list")
+        for item in embeddings:
+            if not isinstance(item, list):
+                raise OllamaError("Ollama /api/embed returned a non-list vector")
+        return embeddings
+
+    async def _embed_legacy(
+        self,
+        client: httpx.AsyncClient,
+        batch: list[str],
+    ) -> list[list[float]]:
+        vectors: list[list[float]] = []
+        for text in batch:
+            response = await client.post(
+                "/api/embeddings",
+                json={"model": self.embed_model, "prompt": text},
+            )
+            if response.status_code >= 400:
+                raise OllamaError(
+                    f"Ollama embed failed ({response.status_code}): {response.text}"
                 )
-                if response.status_code >= 400:
-                    raise OllamaError(
-                        f"Ollama embed failed ({response.status_code}): {response.text}"
-                    )
-                data = response.json()
-                embedding = data.get("embedding")
-                if not isinstance(embedding, list):
-                    raise OllamaError("Ollama embed response missing embedding list")
-                vectors.append(embedding)
+            data = response.json()
+            embedding = data.get("embedding")
+            if not isinstance(embedding, list):
+                raise OllamaError("Ollama embed response missing embedding list")
+            vectors.append(embedding)
         return vectors
 
     async def chat(

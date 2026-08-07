@@ -17,11 +17,10 @@ if errorlevel 1 (
 )
 
 echo.
-echo [1/3] Starting Qdrant...
+echo [1/3] Ensuring Docker + starting Qdrant...
 call "%~dp0start-qdrant.bat"
 if errorlevel 1 (
-  echo [ERROR] Qdrant failed to start.
-  exit /b 1
+  echo [WARN] Qdrant step failed. Continuing with API + Web anyway.
 )
 
 echo.

@@ -4,7 +4,7 @@
 
 ```text
 User (chat + mode)
-    → apps/web (Next.js)          [Phase 5 UI]
+    → apps/web (Next.js)
     → POST /chat { message, mode }
     → apps/api (FastAPI)
     → rag registry (mode → pipeline)
@@ -17,18 +17,19 @@ User (chat + mode)
 
 | Layer | Path | Job |
 |-------|------|-----|
-| UI | `apps/web` | Chat, ModeSwitcher, upload (Phase 5) |
+| UI | `apps/web` | Chat, ModeSwitcher, upload (implemented) |
 | Routes | `apps/api/app/api/routes` | Thin HTTP entry |
 | Schemas | `apps/api/app/schemas` | Request/response contracts |
 | Registry | `apps/api/app/rag` | Map `mode` → pipeline |
 | Pipelines | `apps/api/app/rag/{mode}` | Mode-specific logic |
+| Scan | `apps/api/app/services/scan` | Detect type + extract text |
 | Ollama | `apps/api/app/services/ollama` | Chat + embeddings |
 | Qdrant | `apps/api/app/services/qdrant` | Upsert + search |
 | Data | `data/raw`, `data/processed` | Files on disk |
 
 ## Mode switch
 
-- UI stores current `mode` (Phase 5)
+- UI stores current `mode`
 - Every chat request sends that `mode`
 - Backend registry picks the pipeline
 - Same conversation can use different modes across messages
@@ -42,16 +43,22 @@ RagMode = simple | agentic | hybrid | graph | multi_hop
 ChatRequest  { message, mode, conversation_id? }
 ChatResponse { answer, mode, sources[] }
 IngestResponse { filename, chunks_upserted, collection }
+ScanFolderResponse { scanned, ingested, failed, results[] }
 ```
 
-## Ingest flow (implemented)
+## Ingest / scan flow (implemented)
 
 ```text
-POST /documents/ingest (.txt / .md)
+POST /documents/ingest (.txt / .md / .pdf)
   → data/raw
+  → services/scan (extract text)
   → chunk
   → embed (Ollama)
-  → upsert (Qdrant rag_chunks)
+  → upsert (Qdrant)
+
+POST /documents/scan
+  → list data/raw supported files
+  → scan + ingest each (collect per-file errors)
 ```
 
 ## Chat flow (implemented)

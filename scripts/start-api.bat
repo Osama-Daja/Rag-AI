@@ -56,8 +56,14 @@ if not exist ".env" (
   )
 )
 
+REM Prefer project .env values over leftover machine env vars
+for /f "usebackq eol=# tokens=1,* delims==" %%A in (".env") do (
+  if not "%%A"=="" set "%%A=%%B"
+)
+
 echo Starting FastAPI on http://localhost:8000
 echo Docs: http://localhost:8000/docs
+echo Qdrant collection: %QDRANT_COLLECTION%
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 endlocal

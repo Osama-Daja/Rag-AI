@@ -24,7 +24,7 @@ Rag-AI is a local monorepo for experimenting with multiple RAG strategies in **o
 | 2 | Scaffold `apps/web` and `apps/api` + run scripts — done |
 | 3 | Qdrant + Ollama clients — done |
 | 4 | Simple RAG (ingest + retrieve + generate) — done |
-| 5 | Chat UI + ModeSwitcher — next |
+| 5 | Chat UI + ModeSwitcher + Design agent — done |
 | 6 | Hybrid, multi-hop, agentic, graph — one by one |
 
 ## How to run
@@ -41,7 +41,8 @@ See root [README.md](../README.md) and [scripts/README.md](../scripts/README.md)
 
 | Area | Specialist |
 |------|------------|
-| UI | Frontend agent |
+| UI behavior | Frontend agent |
+| Look / CSS | Design agent |
 | API wiring | Backend agent |
 | Pipelines / vectors / prompts | RagAI agent |
 | Routing all of the above | TeamLeader |
