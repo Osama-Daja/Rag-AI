@@ -10,6 +10,7 @@ Vector store client for:
 - Ensure collection exists
 - Upsert chunk embeddings
 - Search top-k by vector
+- Scroll payloads (for hybrid BM25)
 
 ## Config
 
@@ -19,7 +20,7 @@ Vector store client for:
 
 ## Code
 
-- `client.py` — `QdrantService` (`ping`, `ensure_collection`, `upsert`, `search`)
+- `client.py` — `QdrantService` (`ping`, `ensure_collection`, `upsert`, `search`, `scroll_texts`)
 - Wired via `app.api.deps.get_qdrant_service`
 
 ## Payload convention

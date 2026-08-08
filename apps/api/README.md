@@ -40,13 +40,14 @@ curl -X POST http://localhost:8000/documents/scan
 
 Scans supported files in `data/raw` and ingests each (per-file errors collected).
 
-### Chat (simple RAG)
+### Chat (simple / hybrid RAG)
 
 ```bat
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"simple\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"hybrid\"}"
 ```
 
-Other modes return `400` until implemented.
+`hybrid` fuses dense Qdrant search with BM25 over chunk texts (RRF). Other modes return `400` until implemented.
 
 ## Layout
 
@@ -61,13 +62,14 @@ app/
   services/
     scan/              extract text (txt/md/pdf) + list raw files
     ollama/            embed + chat
-    qdrant/            upsert + search
+    qdrant/            upsert + search + scroll
     chunking.py
     ingest.py          orchestrates scan → chunk → embed → upsert
   rag/
     base.py
     registry.py
     simple/            active pipeline
+    hybrid/            dense + BM25 (RRF)
 ```
 
 ## Performance knobs
@@ -80,6 +82,8 @@ Defaults favor fewer, larger chunks and batched embeds:
 | `RAG_CHUNK_SIZE` / `RAG_CHUNK_OVERLAP` | `1200` / `150` | fewer chunks → faster ingest |
 | `RAG_TOP_K` | `4` | fewer hits in chat context |
 | `RAG_SOURCE_PREVIEW_CHARS` | `500` | truncates retrieved text sent to the LLM |
+| `RAG_HYBRID_CANDIDATE_K` | `12` | per-leg candidates before RRF |
+| `RAG_HYBRID_SCROLL_LIMIT` | `2000` | max points scrolled for BM25 |
 
 Restart the API after changing `.env`.
 

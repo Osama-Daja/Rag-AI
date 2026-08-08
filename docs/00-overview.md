@@ -25,7 +25,7 @@ Rag-AI is a local monorepo for experimenting with multiple RAG strategies in **o
 | 3 | Qdrant + Ollama clients — done |
 | 4 | Simple RAG (ingest + retrieve + generate) — done |
 | 5 | Chat UI + ModeSwitcher + Design agent — done |
-| 6 | Hybrid, multi-hop, agentic, graph — one by one |
+| 6 | Hybrid active; multi-hop, agentic, graph — one by one |
 
 ## How to run
 

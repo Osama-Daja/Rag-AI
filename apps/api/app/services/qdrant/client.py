@@ -128,3 +128,45 @@ class QdrantService:
             }
             for hit in points
         ]
+
+    async def scroll_texts(self, limit: int | None = None) -> list[dict[str, Any]]:
+        """Scroll collection points (id + payload) for keyword/BM25 retrieval."""
+        name = self.collection_name
+        max_points = limit if limit is not None else self._settings.rag_hybrid_scroll_limit
+        if max_points <= 0:
+            return []
+
+        def _scroll() -> list[dict[str, Any]]:
+            if not self._client.collection_exists(collection_name=name):
+                return []
+
+            collected: list[dict[str, Any]] = []
+            next_offset: Any = None
+            page_size = min(256, max_points)
+
+            while len(collected) < max_points:
+                remaining = max_points - len(collected)
+                batch_limit = min(page_size, remaining)
+                points, next_offset = self._client.scroll(
+                    collection_name=name,
+                    limit=batch_limit,
+                    offset=next_offset,
+                    with_payload=True,
+                    with_vectors=False,
+                )
+                for point in points:
+                    collected.append(
+                        {
+                            "id": str(point.id),
+                            "payload": point.payload or {},
+                        }
+                    )
+                if next_offset is None or not points:
+                    break
+
+            return collected
+
+        try:
+            return await asyncio.to_thread(_scroll)
+        except UnexpectedResponse as exc:
+            raise QdrantServiceError(f"Qdrant scroll failed: {exc}") from exc

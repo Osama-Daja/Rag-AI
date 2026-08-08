@@ -78,7 +78,7 @@ An always-on rule (`.cursor/rules/team-leader.mdc`) keeps TeamLeader active.
 3. Wire Qdrant + Ollama — done
 4. Simple RAG pipeline — done
 5. Chat UI + mode switch — done
-6. Add other RAG modes one by one
+6. Hybrid RAG active; multi-hop / agentic / graph next
 
 ## Env
 

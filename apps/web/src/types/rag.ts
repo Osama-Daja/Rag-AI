@@ -14,7 +14,7 @@ export const ALL_MODES: RagMode[] = [
 ];
 
 /** Modes currently supported by the backend registry. */
-export const ENABLED_MODES: RagMode[] = ["simple"];
+export const ENABLED_MODES: RagMode[] = ["simple", "hybrid"];
 
 export type ChatRequest = {
   message: string;
