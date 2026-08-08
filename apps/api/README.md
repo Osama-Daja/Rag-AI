@@ -40,15 +40,16 @@ curl -X POST http://localhost:8000/documents/scan
 
 Scans supported files in `data/raw` and ingests each (per-file errors collected).
 
-### Chat (simple / hybrid / multi_hop)
+### Chat (simple / hybrid / multi_hop / agentic)
 
 ```bat
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"simple\"}"
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"hybrid\"}"
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"multi_hop\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"agentic\"}"
 ```
 
-`hybrid` fuses dense Qdrant search with BM25 (RRF). `multi_hop` does retrieve → follow-up query → retrieve → answer. Other modes return `400` until implemented.
+`hybrid` fuses dense Qdrant search with BM25 (RRF). `multi_hop` does retrieve → follow-up query → retrieve → answer. `agentic` loops search/finish until done or max steps. `graph` returns `400` until implemented.
 
 ## Layout
 
@@ -72,6 +73,7 @@ app/
     simple/            active pipeline
     hybrid/            dense + BM25 (RRF)
     multi_hop/         fixed 2-hop dense retrieve
+    agentic/           bounded search/finish loop
 ```
 
 ## Performance knobs
@@ -87,6 +89,8 @@ Defaults favor fewer, larger chunks and batched embeds:
 | `RAG_HYBRID_CANDIDATE_K` | `12` | per-leg candidates before RRF |
 | `RAG_HYBRID_SCROLL_LIMIT` | `2000` | max points scrolled for BM25 |
 | `RAG_MULTI_HOP_TOP_K` | `4` | per-hop retrieve size for multi_hop |
+| `RAG_AGENTIC_MAX_STEPS` | `3` | agent decision rounds |
+| `RAG_AGENTIC_TOP_K` | `4` | hits per agentic search |
 
 Restart the API after changing `.env`.
 

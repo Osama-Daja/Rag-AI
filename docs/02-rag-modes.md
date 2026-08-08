@@ -7,7 +7,7 @@ All modes share one chat. The difference is the pipeline behind `mode`.
 | `simple` | Embed query → top-k from Qdrant → prompt → Ollama | Active |
 | `hybrid` | Dense (vectors) + BM25 keyword fusion (RRF) | Active |
 | `multi_hop` | Retrieve → follow-up query → retrieve again → answer | Active |
-| `agentic` | LLM decides tools (search, re-query) | Planned |
+| `agentic` | LLM chooses search/finish in a bounded loop | Active |
 | `graph` | Entity/relation graph + retrieval | Planned |
 
 ## Folder layout
@@ -30,6 +30,7 @@ PIPELINES = {
   "simple": SimpleRagPipeline,
   "hybrid": HybridRagPipeline,
   "multi_hop": MultiHopRagPipeline,
+  "agentic": AgenticRagPipeline,
 }
 ```
 

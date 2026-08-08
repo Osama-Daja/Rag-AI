@@ -1,17 +1,36 @@
 # Agentic RAG
 
-**Status:** planned
+**Status:** active (Phase 6)
 
 ## Job
 
-LLM-driven loop: the model may choose tools (search, re-query, refine) before answering.
+Bounded ReAct-lite loop: the LLM chooses `search` or `finish` each step before answering.
 
-## Belongs here (later)
+## Flow
 
-- Tool definitions for retrieval
-- Agent loop / stop conditions
-- `AgenticRagPipeline`
+1. Model emits `ACTION: search` + `QUERY` or `ACTION: finish` + `ANSWER`
+2. Search → dense Qdrant retrieve → append observation
+3. Loop until finish or `RAG_AGENTIC_MAX_STEPS`
+4. On max steps → forced final answer from accumulated sources
 
-## Not yet
+## Code
 
-No implementation until TeamLeader schedules this mode after simple RAG.
+- `pipeline.py` — `AgenticRagPipeline`
+- `actions.py` — parse ACTION blocks
+- `prompts.py` — agent system/user prompts + observation formatting
+
+## Config
+
+- `RAG_AGENTIC_MAX_STEPS` — decision rounds (default `3`)
+- `RAG_AGENTIC_TOP_K` — hits per search (default `4`)
+- Reuses `RAG_SOURCE_PREVIEW_CHARS`
+
+## Depends on
+
+- `services/ollama` — embed + chat
+- `services/qdrant` — dense search
+- `rag/simple/prompt.py` — forced final answer
+
+## Owned by
+
+RagAI agent — `.cursor/agents/RAGAI.md`

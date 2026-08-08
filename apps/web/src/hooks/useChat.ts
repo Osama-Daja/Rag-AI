@@ -46,13 +46,21 @@ export function useChat() {
       };
       setMessages((prev) => [...prev, userMessage]);
       setIsSending(true);
-      setStatus(
-        mode === "multi_hop" ? "Multi-hop retrieving…" : "Retrieving context…",
-      );
+      const busyStatus =
+        mode === "agentic"
+          ? "Agent looping…"
+          : mode === "multi_hop"
+            ? "Multi-hop retrieving…"
+            : "Retrieving context…";
+      setStatus(busyStatus);
 
       try {
         setStatus(
-          mode === "multi_hop" ? "Multi-hop retrieving…" : "Thinking with Ollama…",
+          mode === "agentic"
+            ? "Agent looping…"
+            : mode === "multi_hop"
+              ? "Multi-hop retrieving…"
+              : "Thinking with Ollama…",
         );
         const response = await postChat({
           message: trimmed,

@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     rag_hybrid_candidate_k: int = 12
     rag_hybrid_scroll_limit: int = 2000
     rag_multi_hop_top_k: int = 4
+    rag_agentic_max_steps: int = 5
+    rag_agentic_top_k: int = 4
     data_raw_dir: str = _DEFAULT_DATA_RAW
 
     def model_post_init(self, __context: object) -> None:
