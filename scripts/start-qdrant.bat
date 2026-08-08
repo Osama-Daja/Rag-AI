@@ -12,7 +12,7 @@ if errorlevel 1 (
 echo Starting Qdrant...
 docker compose -f docker\docker-compose.yml up -d
 if errorlevel 1 (
-  echo [WARN] Compose failed to start rag-ai-qdrant.
+  echo [WARN] Compose failed to start rag-ai-db.
   echo        Checking if something is already serving Qdrant on :6333...
   powershell -NoProfile -Command "try { $r = Invoke-WebRequest -Uri 'http://localhost:6333/readyz' -UseBasicParsing -TimeoutSec 3; if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) { exit 0 } else { exit 1 } } catch { try { $r = Invoke-WebRequest -Uri 'http://localhost:6333/' -UseBasicParsing -TimeoutSec 3; exit 0 } catch { exit 1 } }"
   if errorlevel 1 (

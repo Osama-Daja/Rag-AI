@@ -47,20 +47,24 @@ export function useChat() {
       setMessages((prev) => [...prev, userMessage]);
       setIsSending(true);
       const busyStatus =
-        mode === "agentic"
-          ? "Agent looping…"
-          : mode === "multi_hop"
-            ? "Multi-hop retrieving…"
-            : "Retrieving context…";
+        mode === "graph"
+          ? "Graph retrieving…"
+          : mode === "agentic"
+            ? "Agent looping…"
+            : mode === "multi_hop"
+              ? "Multi-hop retrieving…"
+              : "Retrieving context…";
       setStatus(busyStatus);
 
       try {
         setStatus(
-          mode === "agentic"
-            ? "Agent looping…"
-            : mode === "multi_hop"
-              ? "Multi-hop retrieving…"
-              : "Thinking with Ollama…",
+          mode === "graph"
+            ? "Graph retrieving…"
+            : mode === "agentic"
+              ? "Agent looping…"
+              : mode === "multi_hop"
+                ? "Multi-hop retrieving…"
+                : "Thinking with Ollama…",
         );
         const response = await postChat({
           message: trimmed,

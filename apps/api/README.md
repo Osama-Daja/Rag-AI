@@ -40,16 +40,17 @@ curl -X POST http://localhost:8000/documents/scan
 
 Scans supported files in `data/raw` and ingests each (per-file errors collected).
 
-### Chat (simple / hybrid / multi_hop / agentic)
+### Chat (all modes)
 
 ```bat
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"simple\"}"
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"hybrid\"}"
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"multi_hop\"}"
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"agentic\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"graph\"}"
 ```
 
-`hybrid` fuses dense Qdrant search with BM25 (RRF). `multi_hop` does retrieve → follow-up query → retrieve → answer. `agentic` loops search/finish until done or max steps. `graph` returns `400` until implemented.
+`hybrid` fuses dense + BM25 (RRF). `multi_hop` does retrieve → follow-up → retrieve. `agentic` loops search/finish. `graph` extracts triples, expands neighbors, retrieves again.
 
 ## Layout
 
@@ -74,6 +75,7 @@ app/
     hybrid/            dense + BM25 (RRF)
     multi_hop/         fixed 2-hop dense retrieve
     agentic/           bounded search/finish loop
+    graph/             query-time entity graph expand
 ```
 
 ## Performance knobs
@@ -91,6 +93,9 @@ Defaults favor fewer, larger chunks and batched embeds:
 | `RAG_MULTI_HOP_TOP_K` | `4` | per-hop retrieve size for multi_hop |
 | `RAG_AGENTIC_MAX_STEPS` | `3` | agent decision rounds |
 | `RAG_AGENTIC_TOP_K` | `4` | hits per agentic search |
+| `RAG_GRAPH_SEED_K` | `4` | seed retrieve for graph mode |
+| `RAG_GRAPH_EXPAND_K` | `4` | expand retrieve for graph mode |
+| `RAG_GRAPH_HOPS` | `1` | neighbor hops in entity graph |
 
 Restart the API after changing `.env`.
 

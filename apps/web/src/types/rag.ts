@@ -19,6 +19,7 @@ export const ENABLED_MODES: RagMode[] = [
   "hybrid",
   "multi_hop",
   "agentic",
+  "graph",
 ];
 
 export type ChatRequest = {

@@ -26,4 +26,5 @@ docker compose -f docker\docker-compose.yml up -d
 docker compose -f docker\docker-compose.yml down
 ```
 
+Container name: `rag-ai-db`  
 Dashboard/API: http://localhost:6333/dashboard

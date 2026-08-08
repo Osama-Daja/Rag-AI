@@ -4,7 +4,7 @@ Next.js + TypeScript UI for Rag-AI.
 
 ## Status
 
-Phase 5–6: one chat surface, ModeSwitcher (`simple` + `hybrid` + `multi_hop` + `agentic`), document upload.
+Phase 5–6: one chat surface, ModeSwitcher (all modes), document upload.
 
 ## Run
 

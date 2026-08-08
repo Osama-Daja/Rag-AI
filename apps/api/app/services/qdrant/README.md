@@ -15,7 +15,7 @@ Vector store client for:
 ## Config
 
 - `QDRANT_URL` — `http://localhost:6333`
-- `QDRANT_COLLECTION` — default `rag_chunks`
+- `QDRANT_COLLECTION` — default `rag-ai-db`
 - Vector size from `OLLAMA_EMBED_DIM` (default `768`)
 
 ## Code

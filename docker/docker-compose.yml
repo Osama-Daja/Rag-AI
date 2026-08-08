@@ -1,13 +1,13 @@
 services:
-  qdrant:
+  rag-ai-db:
     image: qdrant/qdrant:v1.13.2
-    container_name: rag-ai-qdrant
+    container_name: rag-ai-db
     ports:
       - "6333:6333"
       - "6334:6334"
     volumes:
-      - qdrant_data:/qdrant/storage
+      - rag_ai_db_data:/qdrant/storage
     restart: unless-stopped
 
 volumes:
-  qdrant_data:
+  rag_ai_db_data:

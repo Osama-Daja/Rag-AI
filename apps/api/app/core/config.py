@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     ollama_embed_dim: int = 768
     ollama_embed_batch_size: int = 32
     qdrant_url: str = "http://localhost:6333"
-    qdrant_collection: str = "rag_chunks"
+    qdrant_collection: str = "rag-ai-db"
     api_cors_origins: str = "http://localhost:3000"
     rag_chunk_size: int = 1200
     rag_chunk_overlap: int = 150
@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     rag_multi_hop_top_k: int = 4
     rag_agentic_max_steps: int = 5
     rag_agentic_top_k: int = 4
+    rag_graph_seed_k: int = 4
+    rag_graph_expand_k: int = 4
+    rag_graph_hops: int = 1
     data_raw_dir: str = _DEFAULT_DATA_RAW
 
     def model_post_init(self, __context: object) -> None:

@@ -27,7 +27,7 @@ Methods: `ping`, `embed`, `chat`
 | Item | Default |
 |------|---------|
 | URL | `http://localhost:6333` |
-| Collection | `rag_chunks` |
+| Collection | `rag-ai-db` |
 | Distance | Cosine |
 | Role | Vector store for chunk embeddings |
 
