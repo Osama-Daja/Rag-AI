@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     rag_source_preview_chars: int = 500
     rag_hybrid_candidate_k: int = 12
     rag_hybrid_scroll_limit: int = 2000
+    rag_multi_hop_top_k: int = 4
     data_raw_dir: str = _DEFAULT_DATA_RAW
 
     def model_post_init(self, __context: object) -> None:

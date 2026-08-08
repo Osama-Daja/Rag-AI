@@ -40,14 +40,15 @@ curl -X POST http://localhost:8000/documents/scan
 
 Scans supported files in `data/raw` and ingests each (per-file errors collected).
 
-### Chat (simple / hybrid RAG)
+### Chat (simple / hybrid / multi_hop)
 
 ```bat
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"simple\"}"
 curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"hybrid\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\":\"What is in the document?\",\"mode\":\"multi_hop\"}"
 ```
 
-`hybrid` fuses dense Qdrant search with BM25 over chunk texts (RRF). Other modes return `400` until implemented.
+`hybrid` fuses dense Qdrant search with BM25 (RRF). `multi_hop` does retrieve → follow-up query → retrieve → answer. Other modes return `400` until implemented.
 
 ## Layout
 
@@ -70,6 +71,7 @@ app/
     registry.py
     simple/            active pipeline
     hybrid/            dense + BM25 (RRF)
+    multi_hop/         fixed 2-hop dense retrieve
 ```
 
 ## Performance knobs
@@ -84,6 +86,7 @@ Defaults favor fewer, larger chunks and batched embeds:
 | `RAG_SOURCE_PREVIEW_CHARS` | `500` | truncates retrieved text sent to the LLM |
 | `RAG_HYBRID_CANDIDATE_K` | `12` | per-leg candidates before RRF |
 | `RAG_HYBRID_SCROLL_LIMIT` | `2000` | max points scrolled for BM25 |
+| `RAG_MULTI_HOP_TOP_K` | `4` | per-hop retrieve size for multi_hop |
 
 Restart the API after changing `.env`.
 

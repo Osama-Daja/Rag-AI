@@ -23,7 +23,7 @@ You are called by TeamLeader when the task needs RAG, Ollama, or Qdrant design.
 |------|-----|--------|
 | simple | retrieve → generate | first to implement |
 | hybrid | dense + BM25 keyword fusion (RRF) | active |
-| multi_hop | retrieve → reason → retrieve | planned |
+| multi_hop | retrieve → follow-up → retrieve | active |
 | agentic | LLM chooses tools / re-queries | planned |
 | graph | entity/relation graph retrieval | planned |
 

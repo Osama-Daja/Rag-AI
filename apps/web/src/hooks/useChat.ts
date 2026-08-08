@@ -46,10 +46,14 @@ export function useChat() {
       };
       setMessages((prev) => [...prev, userMessage]);
       setIsSending(true);
-      setStatus("Retrieving context…");
+      setStatus(
+        mode === "multi_hop" ? "Multi-hop retrieving…" : "Retrieving context…",
+      );
 
       try {
-        setStatus("Thinking with Ollama…");
+        setStatus(
+          mode === "multi_hop" ? "Multi-hop retrieving…" : "Thinking with Ollama…",
+        );
         const response = await postChat({
           message: trimmed,
           mode,

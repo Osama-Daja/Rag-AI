@@ -2,14 +2,16 @@ from __future__ import annotations
 
 from app.rag.base import RagPipeline
 from app.rag.hybrid.pipeline import HybridRagPipeline
+from app.rag.multi_hop.pipeline import MultiHopRagPipeline
 from app.rag.simple.pipeline import SimpleRagPipeline
 from app.schemas.chat import RagMode
 
-AVAILABLE_MODES: tuple[str, ...] = ("simple", "hybrid")
+AVAILABLE_MODES: tuple[str, ...] = ("simple", "hybrid", "multi_hop")
 
 _PIPELINES: dict[str, type] = {
     "simple": SimpleRagPipeline,
     "hybrid": HybridRagPipeline,
+    "multi_hop": MultiHopRagPipeline,
 }
 
 
